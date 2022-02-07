@@ -1,105 +1,81 @@
 
-# Project-oriented workflow
+## [Saving source and blank slates](https://rstats.wtf/save-source.html#save-source)
 
-([Older
-version](https://github.com/2DegreesInvesting/ds-incubator/blob/main/2020-01-14_project-oriented-workflow.pdf).)
+### [Always start R with a blank slate](https://rstats.wtf/save-source.html#always-start-r-with-a-blank-slate)
 
-[Project-oriented
-workflow](https://www.tidyverse.org/blog/2017/12/workflow-vs-script/)
+-   Don’t reload the workspace from an .Rdata file.
+-   Don’t save the workspace to an .Rdata file.
 
-<img src="https://i.imgur.com/jKWxztR.png" align="center" width = 750 />
+<img src="https://i.imgur.com/Z3r3e2V.png" align="center" height = 550 />
 
-–Jenny Bryan
+### [Restart R often (Ctrl+Shift+F10)](https://rstats.wtf/save-source.html#restart-r-often-during-development)
 
-## Workflow versus product
+Other useful shortcuts:
 
-### Definitions
+-   In .R:
 
--   Workflow: personal taste and habits.
+    -   Run selected line: Ctrl+Enter
+    -   Run all code above: Ctrl+Alt+B
+    -   Run all code: Ctrl+Shift+Enter
 
--   Product: essence of your project.
+In .Rmd:
 
-**Don’t hardwire your workflow into your product.**
+<img src=https://i.imgur.com/tRoHK69.png width=300>
 
-### Which is workflow or product?
+### [What’s wrong with `rm(list = ls())`](https://rstats.wtf/save-source.html#rm-list-ls)
 
-1.  The editor you use to write your R code.
+-   Problem: It makes your script vulnerable to hidden dependencies.
+-   Solution: Write every script assuming it will be run in a fresh R
+    process.
 
-2.  The raw data.
+Details:
 
-3.  The name of your home directory.
+-   It only deletes user-created objects from the global workspace, but
 
-4.  The R code someone needs to run on your raw data to get your
-    results, including the explicit library() calls to load necessary
-    packages.
+-   Other changes persist invisibly and can have profound effects, e.g.:
 
-### Example: Remove workflow
+    -   Packages that have ever been attached via `library()` are still
+        available.
+    -   Options that have been set to non-default values remain that
+        way.
+    -   The working directory is not affected.
 
-The name of the home directory is workflow, not product.
+### [Objects that take a long time to create](https://rstats.wtf/save-source.html#objects-that-take-a-long-time-to-create)
 
-``` r
-home <- "C:/Users/Mauro/Documents/"  # Workflow
-proj_path <- "path/to/project"
-paste0(home, proj_path)
-#> [1] "C:/Users/Mauro/Documents/path/to/project"
-```
+Isolate each computationally demanding step in its own script:
 
-Better
-
-``` r
-proj_path <- "path/to/project"
-fs::path_home_r(proj_path)
-#> /home/mauro/path/to/project
-```
-
-Best
+-   Write the precious object to file with
 
 ``` r
-fs::path_home_r("path", "to", "project")
-#> /home/mauro/path/to/project
+saveRDS(my_precious, here("results", "my_precious.rds"))
 ```
 
-## Self-contained projects
-
-### Self-contained projects can be moved around on your computer or onto other computers and will still “just work”.
-
-> It’s like agreeing that we will all drive on the left or the right. A
-> hallmark of civilization is following conventions that constrain your
-> behavior a little, in the name of public safety.
-
-–Jenny Bryan
-
-### What do they look like?
-
-1.  The Project folder contains all relevant files.
-
-2.  Any .R can run from a fresh R process with wd set to root.
-
-3.  Any .R creates all it needs, in its own workspace or folder
-
-4.  Any .R touches nothing it didn’t create (e.g. doesn’t install).
-
-### Violations …
-
-### What should you do instead of this?
+-   Then do downstream work that reloads the precious object
 
 ``` r
-path_to_data <- "../datasets/my-data.csv"
+via my_precious <- readRDS(here("results", "my_precious.rds"))
 ```
 
-### What should you do instead?
+### [Automated workflows](https://rstats.wtf/save-source.html#automated-workflows)
 
-<img src="https://i.imgur.com/V4EkuWY.png" align="center" height = 550 />
+When orchestrating multiple scripts, try run each in its own R session.
 
-### What should you do instead of this?
+Options:
 
-``` r
-pacman::p_load(random)
-```
+-   Use the callr package to `source()` each .R file.
+-   Use `render()` to render each .Rmd in its own R session.
+-   Use the [targets](https://books.ropensci.org/targets/) package
+    (search for [ds-incubator
+    meetups](https://youtube.com/playlist?list=PLvgdJdJDL-APbB315sB3Lv_2VP2g0ioFO)
+    about targets).
 
-## setwd( )
+## [Project-oriented workflow](https://rstats.wtf/project-oriented-workflow.html)
 
-### What’s wrong?
+What if you want to shift focus from project A to project B?
+
+### [We need to talk about `setwd("path/that/only/works/on/my/machine")`](https://rstats.wtf/project-oriented-workflow.html#setwd)
+
+Bad
 
 ``` r
 library(ggplot2)
@@ -109,21 +85,108 @@ p <- ggplot(df, aes(x, y)) + geom_point()
 ggsave("../figs/foofy_scatterplot.png")
 ```
 
-### What’s wrong?
+A little less bad:
 
--   Paths work for nobody besides the author.
--   Project not self-contained and portable.
--   To run, it first needs to be hand edited.
--   Suggests that the useR does all of their work in one R process:
-    -   Unpleasant to work on more than one project at a time
-    -   Easy for work done on one project to accidentally leak into
-        another (e.g., objects, loaded packages, session options).
+-   Call `setwd()` is at the very start of a file (obvious and
+    predictable).
+-   Set the working directory to the project’s root (not a
+    subdirectory).
+-   Build subsequent paths relative to the root.
 
-### What should you do instead?
+``` r
+setwd("/Users/jenny/cuddly_broccoli/verbose_funicular/foofy")
 
--   Use RStudio projects, and/or
+library(ggplot2)
+df <- read.delim("data/raw_foofy_data.csv")
+p <- ggplot(df, aes(x, y)) + geom_point()
+ggsave("figs/foofy_scatterplot.png")
+```
 
--   Use the here package (works well with .Rmd files)
+But wait! There is something awesome …
+
+### [Organize work into projects](https://rstats.wtf/project-oriented-workflow.html#work-in-a-project)
+
+To make your projects portable follow this convention:
+
+-   A “project” folder contains all related files.
+-   The working directory is set to it.
+-   All paths are relative to it.
+
+### [IDE support for projects](https://rstats.wtf/project-oriented-workflow.html#ide-support-for-projects)
+
+An IDE supports projects helps you do these things:
+
+-   Launch the IDE in project A.
+-   Switch from project A to project B.
+-   Have both project A and project B open and running independent R
+    sessions.
+-   When opening a project, restart R, set the working directory,
+    restore files.
+
+### [Tricks for opening Projects](https://rstats.wtf/project-oriented-workflow.html#tricks-for-opening-projects)
+
+-   Have a dedicated folder for your Projects.
+
+``` r
+rstudio_projects <- "/home/mauro/git"
+fs::dir_ls(rstudio_projects, regexp = "[.]Rproj", recurse = TRUE)
+#> /home/mauro/git/2degreesinvesting.github.io/2degreesinvesting.github.io.Rproj
+#> /home/mauro/git/PACTA_analysis/PACTA_analysis.Rproj
+#> /home/mauro/git/ReLTER/ReLTER.Rproj
+#> /home/mauro/git/ST-App/ST-App.Rproj
+#> /home/mauro/git/adminApp/adminApp.Rproj
+#> /home/mauro/git/allodb/allodb.Rproj
+#> /home/mauro/git/bookdown/bookdown.Rproj
+#> /home/mauro/git/coding-helpdesk/coding-helpdesk.Rproj
+#> /home/mauro/git/create_interactive_report/create_interactive_report.Rproj
+#> /home/mauro/git/data-steward-handover/data-steward-handover.Rproj
+#> /home/mauro/git/docker/docker.Rproj
+#> /home/mauro/git/dotfiles/dotfiles.Rproj
+#> /home/mauro/git/dotfiles-private/dotfiles-private.Rproj
+#> /home/mauro/git/ds-incubator/ds-incubator.Rproj
+#> /home/mauro/git/ds.tidyeda/ds.tidyeda.Rproj
+#> /home/mauro/git/ds.webdata/ds.webdata.Rproj
+#> /home/mauro/git/ds.wtf/ds.wtf.Rproj
+#> /home/mauro/git/knitr/knitr.Rproj
+#> /home/mauro/git/meetings/meetings.Rproj
+#> /home/mauro/git/mybook/mybook.Rproj
+#> /home/mauro/git/pactaCore/pactaCore.Rproj
+#> /home/mauro/git/pastax/pastax.Rproj
+#> /home/mauro/git/pastax.data/pastax.data.Rproj
+#> /home/mauro/git/r2dii.analysis/r2dii.analysis.Rproj
+#> /home/mauro/git/r2dii.climate.stress.test/r2dii.climate.stress.test.Rproj
+#> /home/mauro/git/r2dii.colours/r2dii.colours.Rproj
+#> /home/mauro/git/r2dii.data/r2dii.data.Rproj
+#> /home/mauro/git/r2dii.match/r2dii.match.Rproj
+#> /home/mauro/git/r2dii.physical.risk/r2dii.physical.risk.Rproj
+#> /home/mauro/git/r2dii.plot/r2dii.plot.Rproj
+#> /home/mauro/git/r2dii.stress.test.data/r2dii.stress.test.data.Rproj
+#> /home/mauro/git/r2dii.usethis/r2dii.usethis.Rproj
+#> /home/mauro/git/releaseworkflow/releaseworkflow.Rproj
+#> /home/mauro/git/scenarioSelector/scenarioSelector.Rproj
+#> /home/mauro/git/software-review/software-review.Rproj
+#> /home/mauro/git/stress.testing.internal/stress.testing.internal.Rproj
+#> /home/mauro/git/tacApp/tacApp.Rproj
+#> /home/mauro/git/tacApp-backup/tacApp.Rproj
+#> /home/mauro/git/tacAppPrivateData/tacAppPrivateData.Rproj
+#> /home/mauro/git/testcheck/testcheck.Rproj
+```
+
+-   RStudio knows about recently used Projects.
+
+<img src=https://i.imgur.com/BR4V1M0.png width=300>
+
+-   Find and Launch Projects with dedicated software.
+
+<img src=https://i.imgur.com/AGoKfEI.png width=700>
+
+## [Practice safe paths](https://rstats.wtf/safe-paths.html#safe-paths)
+
+### [Use projects and the here package](https://rstats.wtf/safe-paths.html#use-projects-and-the-here-package)
+
+<https://here.r-lib.org/>
+
+Awesome:
 
 ``` r
 library(ggplot2)
@@ -134,42 +197,30 @@ p <- ggplot(df, aes(x, y)) + geom_point()
 ggsave(here("figs", "foofy_scatterplot.png"))
 ```
 
-## rm(list = ls( ))
+### [How to name files](https://rstats.wtf/how-to-name-files.html)
 
-### What’s wrong?
+<img src=https://i.imgur.com/zCwppDN.png width=400>
 
--   Suggests the useR works in one long-running (not fresh) R process.
+Principles:
 
--   Does NOT, in fact, create a fresh R process – it only deletes
-    objects from the global workspace but leaves stuff that make your
-    script vulnerable to hidden dependencies (e.g. packages, options,
-    working directory).
+-   Machine readable.
+-   Human readable.
+-   Plays well with default ordering.
 
--   Is hostile to anyone that you ask to help you with your R problems.
+Awesome:
 
-### What’s better?
+<img src=https://i.imgur.com/dRN5zSd.png width=400>
 
--   Start from blank slate.
+## [API for an analysis](https://rstats.wtf/api-for-an-analysis.html)
 
--   Restart R very often.
+Code:
 
--   Re-run your under-development script from the top. For long running
-    processes:
+<img src=https://i.imgur.com/nbpjCrF.png width=700>
 
-    -   Isolate slow bit in its own script; write it with `saveRDS()`
-        and read it with `readRDS()`, or
-    -   Use [drake](https://docs.ropensci.org/drake/).
+Inputs and outputs:
 
-### Discuss: Must have or nice to have?
+<img src=https://i.imgur.com/HkIcLQc.png width=700>
 
-> The importance of these practices has a lot to do with whether your
-> code will be run by other people, on other machines, and in the
-> future. If your current practices serve your purposes, then go forth
-> and be happy
+Summary:
 
-– Jenny Bryan
-
-### Learn more
-
--   [What They Forgot to Teach You About R (Jenny Bryan & Jim
-    Hester)](https://rstats.wtf/).
+<img src=https://i.imgur.com/rAThdu1.png width=700>
