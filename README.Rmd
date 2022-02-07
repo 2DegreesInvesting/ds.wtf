@@ -1,0 +1,90 @@
+---
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The goal of this series is to lean how to get data from the web. At the end of
+this series you will be able to do things like these:
+
+* Get unstructured data from any website.
+* Learn why websites that expose an API are more useful.
+* Search an API directory for useful APIs.
+* Get structured data from a website that exposes an API.
+
+## Who is the audience?
+
+Anyone who needs to gather data from the web, for example, analysts and
+developers at 2DII working in the PASTAX project.
+
+## Why is this important?
+
+* As an analyst you may want to know which websites are a good source of data so
+that you can explore a particular research question.
+
+* As a developer you may want to know which are the best tools to get data from
+the web, so that you can feed it into analyses automatically.
+
+## Syllabus
+
+### Overview
+
+This meetup overviews the difference between getting data from any website
+versus from a website that exposes an API.
+
+Objectives:
+
+* Overview tools to scrape unstructured data from any website.
+
+* Overview tools to get structure data from a website that exposes an API.
+
+### Scrapping
+
+This meetup covers getting data from any website.
+
+Objectives:
+
+* Understand and implement the ethics of scrapping.
+* Scrape websites where what you see IS what you get and NOT.
+* Develop a sense for how difficult it is to scrape a website.
+* Understand why APIs are useful and where to find them.
+
+### Using APIs
+
+This meetup covers using APIs.
+
+Objectives:
+
+* Remember to prefer API over scrapping.
+* Learn how to search for useful APIs.
+* Use an API.
+
+### Use case
+
+This meetup covers a use case: Getting the list of [registered small and
+medium-sized enterprises
+(SME)](https://esastar-emr.sso.esa.int/PublicEntityDir/PublicEntityDirSme).
+
+Objectives:
+
+* Introduce the [pastax](https://github.com/2DegreesInvesting/pastax) package.
+* Taste the complexity of a real scrapping project.
+* Consider what makes a website easier or harder to scrape.
+
+## Resources
+
+* YouTube [playlist](https://bit.ly/ds-incubator-videos).
+* The
+[ds-incubator](https://github.com/2DegreesInvesting/ds-incubator#ds-incubator)
+project.
+* [Ideas](https://bit.ly/dsi-ideas) for future meetups.
+* [Online course](https://app.dataquest.io/path/apis-web-scraping-r-skill).
+* Package [rvest](https://rvest.tidyverse.org/).
+* Package [httr2](https://httr2.r-lib.org/).
+* Materials
+([ds.webdata/releases](https://github.com/2DegreesInvesting/ds.webdata/releases)).

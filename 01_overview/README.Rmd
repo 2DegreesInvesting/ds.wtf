@@ -1,0 +1,163 @@
+---
+output: github_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Overview
+
+### General setup
+
+```{r}
+library(tidyverse)
+```
+
+### The structure of HTML
+
+HTML stands for "HyperText Markup Language" and looks like this:
+
+```{r}
+webpage <- here::here("01_overview/basic.html")
+
+if (interactive()) webpage %>% browseURL()
+
+webpage %>% readLines() %>% writeLines()
+```
+
+HTML has elements defined by:
+
+* a start tag (e.g. `<body>`), 
+* optional attributes (id='first'), 
+* an end tag (like `</body>`), and 
+* contents (everything in between the start and end tag).
+
+### Harvesting data from the web with R
+
+To extract data from any website you can use the rvest package. 
+
+```{r}
+library(rvest)
+```
+
+Your eventual goal is usually to build up a data frame.
+
+Data exposed as an html table is relatively easy to get.
+
+```{r}
+webpage <- here::here("01_overview/table.html")
+
+if (interactive()) webpage %>% browseURL()
+
+webpage %>% 
+  read_html() %>% 
+  html_node("table") %>% 
+  html_table()
+```
+
+Commonly the data is harder to get and you need other tools.
+
+The [SelectorGadget](https://rvest.tidyverse.org/articles/articles/selectorgadget.html) helps you identify and get data from any website programatically.
+
+```{r}
+webpage <- "https://www.europages.co.uk/companies/automobile.html"
+
+if (interactive()) browseURL(webpage)
+
+html <- read_html(webpage)
+
+name_selector <- ".company-name"
+name <- html %>% 
+  html_elements(name_selector) %>% 
+  html_text2()
+
+description_selector <- ".company-description"
+description <- html %>% 
+  html_elements(description_selector) %>% 
+  html_text2()
+
+companies <- tibble(name, description)
+companies %>% modify(~trimws(gsub("\r", "", .x))) # cleanup
+```
+
+Pros: 
+
+* Free.
+* Reproducible.
+* Scalable.
+
+### Harvesting data from the web with a GUI
+
+You may also harvest data from the web with GUIs. Some work with any website and
+others work with a specific website.
+
+* GUI, genral: [octoparse](https://www.octoparse.com/), [parsehub](https://www.parsehub.com/).
+
+* GUI, specific: [Reoon YellowPages Scraper](https://www.reoon.com/yellowpages-scraper/).
+
+Pros:
+
+* No coding required.
+
+Cons:
+
+* May need to pay.
+* Not so reproducible?
+* Not so scalable?
+
+### Gettind data from the web via an API with R
+
+Some websites offer an Application User Inerface (API) -- a tool that
+allows you to get data in a structured, machine-readable form. This is the
+easiest, most reproducible, and scalable way to get data from a website into
+your analyses.
+
+You can use the httr package to perform a request, fetch the response, and wrangle it into a data frame.
+
+```{r}
+library(httr2)
+```
+
+For example, take https://fakerapi.it/en#basic-usage. From the
+[documentation](https://fakerapi.it/en#basic-usage) we note:
+
+* We can request a number of resources, from the URL `https://fakerapi.it/api/v1/{resource}`.
+* We can pass parameters, and their names start with _.
+
+It's easy to build tools to automate the process of requesting a resource. 
+
+For example, lest's create a `fake_persons()`
+
+```{r}
+fake_persons <- function(gender, quantity) {
+  params <- list(gender = gender, quantity = quantity)
+  names(params) <- paste0("_", names(params))
+  
+  json <- request("https://fakerapi.it/api/v1") %>%
+    req_url_path_append("persons") %>%
+    req_url_query(!!!params) %>%
+    req_perform() %>%
+    resp_body_json()
+  
+  tibble(
+    firstname = map_chr(json$data, "firstname"),
+    lastname = map_chr(json$data, "lastname"),
+    email = map_chr(json$data, "email"),
+    gender = map_chr(json$data, "gender")
+  )
+}
+```
+
+```{r}
+fake_persons("female", 3)
+
+fake_persons("male", 2)
+```
+
+### How to find useful APIs?
+
+https://github.com/2DegreesInvesting/resources/issues/295
