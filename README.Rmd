@@ -41,9 +41,20 @@ more effective, and more robust.
 
 ## Syllabus
 
+### A holistic workflow
+
+This meetup covers selected topics from the section A holistic workflow of [What They Forgot to teach you about R](https://rstats.wtf/).
+
+Objectives:
+
+* Learn how to start from a blank slate, i.e. force yourself to save the source.
+* Understand how to use a project-oriented workflow.
+* Learn how to practice safe paths.
+* Learn how to name files following three basic principles.
+* Overview one API for a humane analysis.
+
 ### Next (tentative)
 
-* Selected topics from section I: A holistic workflow.
 * Selected topics from section II: Personal R Admin.
 * Selected topics from section III: All is fail.
 
