@@ -9,72 +9,43 @@ knitr::opts_chunk$set(
 )
 ```
 
-The goal of this series is to lean how to get data from the web. At the end of
-this series you will be able to do things like these:
+The goal of this series it to build "holistic and project-oriented workflows
+that address the most common sources of friction in data analysis, outside of
+doing the statistical analysis itself" (https://rstats.wtf/).
 
-* Get unstructured data from any website.
-* Learn why websites that expose an API are more useful.
-* Search an API directory for useful APIs.
-* Get structured data from a website that exposes an API.
+At the end of this series you will be able to do things like these:
+
+* Setup R to always start with a blank slate.
+* Understand what's wrong with `rm(list = ls())` and what to do instead.
+* Replace `setwd()` with a project-oriented workflow.
+* Control R's startup and manage sensitive information with .Rprofile and .Renviron.
+* Manage your R-package library through time, and across increasing versions of R.
+* Try a new R package from a temporary library, without changing your main library.
+* Debug code with `browser()` and friends.
 
 ## Who is the audience?
 
-Anyone who needs to gather data from the web, for example, analysts and
-developers at 2DII working in the PASTAX project.
+Verbatim from https://rstats.wtf/, the target learner:
+
+* Has a moderate amount of R and RStudio experience.
+* Is largely self-taught.
+* Suspects they have drifted into some idiosyncratic habits that may slow them
+down or make their work products more brittle.
+* Is interested in (re)designing their R lifestyle, to be more effective and
+more self-sufficient.
 
 ## Why is this important?
 
-* As an analyst you may want to know which websites are a good source of data so
-that you can explore a particular research question.
-
-* As a developer you may want to know which are the best tools to get data from
-the web, so that you can feed it into analyses automatically.
+By addressing the main causes of friction your data analyses will become faster,
+more effective, and more robust.
 
 ## Syllabus
 
-### Overview
+### Next (tentative)
 
-This meetup overviews the difference between getting data from any website
-versus from a website that exposes an API.
-
-Objectives:
-
-* Overview tools to scrape unstructured data from any website.
-
-* Overview tools to get structure data from a website that exposes an API.
-
-### Scrapping
-
-This meetup covers getting data from any website.
-
-Objectives:
-
-* Understand and implement the ethics of scrapping.
-* Scrape websites where what you see IS what you get and NOT.
-* Develop a sense for how difficult it is to scrape a website.
-* Understand why APIs are useful and where to find them.
-
-### Using APIs
-
-This meetup covers using APIs.
-
-Objectives:
-
-* Remember to prefer API over scrapping.
-* Learn how to search for useful APIs.
-* Use an API.
-
-### Use case
-
-This meetup covers a use case: Getting the list of [registered small and
-medium-sized enterprises
-(SME)](https://esastar-emr.sso.esa.int/PublicEntityDir/PublicEntityDirSme).
-
-Objectives:
-
-* Introduce the [pastax](https://github.com/2DegreesInvesting/pastax) package.
-* Taste the complexity of a real scrapping project.
-* Consider what makes a website easier or harder to scrape.
+* Selected topics from section I: A holistic workflow.
+* Selected topics from section II: Personal R Admin.
+* Selected topics from section III: All is fail.
 
 ## Resources
 
@@ -83,8 +54,6 @@ Objectives:
 [ds-incubator](https://github.com/2DegreesInvesting/ds-incubator#ds-incubator)
 project.
 * [Ideas](https://bit.ly/dsi-ideas) for future meetups.
-* [Online course](https://app.dataquest.io/path/apis-web-scraping-r-skill).
-* Package [rvest](https://rvest.tidyverse.org/).
-* Package [httr2](https://httr2.r-lib.org/).
+* [What they forgot to teach you about R (book)](https://rstats.wtf/).
 * Materials
-([ds.webdata/releases](https://github.com/2DegreesInvesting/ds.webdata/releases)).
+([ds.wtf/releases](https://github.com/2DegreesInvesting/ds.wtf/releases)).
