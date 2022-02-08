@@ -13,6 +13,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r}
+library(fs)
+library(here)
+```
+
 ## [Saving source and blank slates](https://rstats.wtf/save-source.html#save-source)
 
 ### [Always start R with a blank slate](https://rstats.wtf/save-source.html#always-start-r-with-a-blank-slate)
@@ -36,9 +41,23 @@ In .Rmd:
 
 <img src=https://i.imgur.com/tRoHK69.png width=300>
 
+### [What's wrong with `rm(list = ls())`](https://rstats.wtf/save-source.html#rm-list-ls)
+
+* Problem: It makes your script vulnerable to hidden dependencies.
+* Solution: Write every script assuming it will be run in a fresh R process.
+
+Details:
+
+* It only deletes user-created objects from the global workspace, but
+* Other changes persist invisibly and can have profound effects, e.g.:
+
+    * Packages that have ever been attached via `library()` are still available.
+    * Options that have been set to non-default values remain that way.
+    * The working directory is not affected.
+
 ## [Project-oriented workflow](https://rstats.wtf/project-oriented-workflow.html)
 
-What if you want to shift focus from project A to project B?
+What if you want to shift focus from project A to project B, or have both open?
 
 ### [We need to talk about `setwd("path/that/only/works/on/my/machine")`](https://rstats.wtf/project-oriented-workflow.html#setwd)
 
@@ -92,6 +111,25 @@ p <- ggplot(df, aes(x, y)) + geom_point()
 ggsave(here("figs", "foofy_scatterplot.png"))
 ```
 
+In .Rmd files the default working directory is odd and thus error prone.
+
+```{r error=TRUE}
+source(path("01_holistic-workflow", "shortcuts.R"))
+
+# WAT?
+getwd()
+path_abs("01_holistic-workflow", "shortcuts.R")
+```
+
+<img src=https://i.imgur.com/UEOpACV.png width=400>
+
+`here()` makes your paths relative to the project root (conventional).
+
+```{r}
+here("01_holistic-workflow", "shortcuts.R")
+source(here("01_holistic-workflow", "shortcuts.R"), echo = TRUE)
+```
+
 ### [IDE support for projects](https://rstats.wtf/project-oriented-workflow.html#ide-support-for-projects)
 
 An IDE supports projects helps you do these things:
@@ -111,8 +149,11 @@ And when opening a project you IDE (e.g. RStudio) does this automatically:
 * Have a dedicated folder for your Projects.
 
 ```{r}
-rstudio_projects <- "/home/mauro/git"
-fs::dir_ls(rstudio_projects, regexp = "[.]Rproj", recurse = TRUE)
+project_folders <- "/home/mauro/git"
+project_pattern <- "[.]Rproj"
+
+project_files <- dir_ls(project_folders, regexp = project_pattern, recurse = TRUE)
+head(project_files)
 ```
 
 * RStudio knows about recently used Projects.
@@ -170,24 +211,8 @@ via my_precious <- readRDS(here("results", "my_precious.rds"))
 
 ### [Automated workflows](https://rstats.wtf/save-source.html#automated-workflows)
 
-When orchestrating multiple scripts, try run each in its own R session. 
+If running multiple scripts from a "controller", run each in its own R session.:
 
-Options:
-
-* Use the callr package to `source()` each .R file.
-* Use `render()` to render each .Rmd in its own R session.
+* Use the callr package to `source()` each .R file, or
+* Use `render()` to render each .Rmd in its own R session, or
 * Use the [targets](https://books.ropensci.org/targets/) package (search for [ds-incubator meetups](https://youtube.com/playlist?list=PLvgdJdJDL-APbB315sB3Lv_2VP2g0ioFO) about targets).
-
-### [What's wrong with `rm(list = ls())`](https://rstats.wtf/save-source.html#rm-list-ls)
-
-* Problem: It makes your script vulnerable to hidden dependencies.
-* Solution: Write every script assuming it will be run in a fresh R process.
-
-Details:
-
-* It only deletes user-created objects from the global workspace, but
-* Other changes persist invisibly and can have profound effects, e.g.:
-
-    * Packages that have ever been attached via `library()` are still available.
-    * Options that have been set to non-default values remain that way.
-    * The working directory is not affected.

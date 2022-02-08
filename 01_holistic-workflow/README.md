@@ -1,4 +1,10 @@
 
+``` r
+library(fs)
+library(here)
+#> here() starts at /home/mauro/git/ds.wtf
+```
+
 ## [Saving source and blank slates](https://rstats.wtf/save-source.html#save-source)
 
 ### [Always start R with a blank slate](https://rstats.wtf/save-source.html#always-start-r-with-a-blank-slate)
@@ -22,9 +28,28 @@ In .Rmd:
 
 <img src=https://i.imgur.com/tRoHK69.png width=300>
 
+### [What’s wrong with `rm(list = ls())`](https://rstats.wtf/save-source.html#rm-list-ls)
+
+-   Problem: It makes your script vulnerable to hidden dependencies.
+-   Solution: Write every script assuming it will be run in a fresh R
+    process.
+
+Details:
+
+-   It only deletes user-created objects from the global workspace, but
+
+-   Other changes persist invisibly and can have profound effects, e.g.:
+
+    -   Packages that have ever been attached via `library()` are still
+        available.
+    -   Options that have been set to non-default values remain that
+        way.
+    -   The working directory is not affected.
+
 ## [Project-oriented workflow](https://rstats.wtf/project-oriented-workflow.html)
 
-What if you want to shift focus from project A to project B?
+What if you want to shift focus from project A to project B, or have
+both open?
 
 ### [We need to talk about `setwd("path/that/only/works/on/my/machine")`](https://rstats.wtf/project-oriented-workflow.html#setwd)
 
@@ -80,6 +105,40 @@ p <- ggplot(df, aes(x, y)) + geom_point()
 ggsave(here("figs", "foofy_scatterplot.png"))
 ```
 
+In .Rmd files the default working directory is odd and thus error prone.
+
+``` r
+source(path("01_holistic-workflow", "shortcuts.R"))
+#> Warning in file(filename, "r", encoding = encoding): cannot open file
+#> '01_holistic-workflow/shortcuts.R': No such file or directory
+#> Error in file(filename, "r", encoding = encoding): cannot open the connection
+
+# WAT?
+getwd()
+#> [1] "/home/mauro/git/ds.wtf/01_holistic-workflow"
+path_abs("01_holistic-workflow", "shortcuts.R")
+#> /home/mauro/git/ds.wtf/01_holistic-workflow/shortcuts.R/01_holistic-workflow
+```
+
+<img src=https://i.imgur.com/UEOpACV.png width=400>
+
+`here()` makes your paths relative to the project root (conventional).
+
+``` r
+here("01_holistic-workflow", "shortcuts.R")
+#> [1] "/home/mauro/git/ds.wtf/01_holistic-workflow/shortcuts.R"
+source(here("01_holistic-workflow", "shortcuts.R"), echo = TRUE)
+#> 
+#> > 1
+#> [1] 1
+#> 
+#> > 2
+#> [1] 2
+#> 
+#> > 3
+#> [1] 3
+```
+
 ### [IDE support for projects](https://rstats.wtf/project-oriented-workflow.html#ide-support-for-projects)
 
 An IDE supports projects helps you do these things:
@@ -101,48 +160,17 @@ automatically:
 -   Have a dedicated folder for your Projects.
 
 ``` r
-rstudio_projects <- "/home/mauro/git"
-fs::dir_ls(rstudio_projects, regexp = "[.]Rproj", recurse = TRUE)
+project_folders <- "/home/mauro/git"
+project_pattern <- "[.]Rproj"
+
+project_files <- dir_ls(project_folders, regexp = project_pattern, recurse = TRUE)
+head(project_files)
 #> /home/mauro/git/2degreesinvesting.github.io/2degreesinvesting.github.io.Rproj
 #> /home/mauro/git/PACTA_analysis/PACTA_analysis.Rproj
 #> /home/mauro/git/ReLTER/ReLTER.Rproj
 #> /home/mauro/git/ST-App/ST-App.Rproj
 #> /home/mauro/git/adminApp/adminApp.Rproj
 #> /home/mauro/git/allodb/allodb.Rproj
-#> /home/mauro/git/bookdown/bookdown.Rproj
-#> /home/mauro/git/coding-helpdesk/coding-helpdesk.Rproj
-#> /home/mauro/git/create_interactive_report/create_interactive_report.Rproj
-#> /home/mauro/git/data-steward-handover/data-steward-handover.Rproj
-#> /home/mauro/git/docker/docker.Rproj
-#> /home/mauro/git/dotfiles/dotfiles.Rproj
-#> /home/mauro/git/dotfiles-private/dotfiles-private.Rproj
-#> /home/mauro/git/ds-incubator/ds-incubator.Rproj
-#> /home/mauro/git/ds.tidyeda/ds.tidyeda.Rproj
-#> /home/mauro/git/ds.webdata/ds.webdata.Rproj
-#> /home/mauro/git/ds.wtf/ds.wtf.Rproj
-#> /home/mauro/git/knitr/knitr.Rproj
-#> /home/mauro/git/meetings/meetings.Rproj
-#> /home/mauro/git/mybook/mybook.Rproj
-#> /home/mauro/git/pactaCore/pactaCore.Rproj
-#> /home/mauro/git/pastax/pastax.Rproj
-#> /home/mauro/git/pastax.data/pastax.data.Rproj
-#> /home/mauro/git/r2dii.analysis/r2dii.analysis.Rproj
-#> /home/mauro/git/r2dii.climate.stress.test/r2dii.climate.stress.test.Rproj
-#> /home/mauro/git/r2dii.colours/r2dii.colours.Rproj
-#> /home/mauro/git/r2dii.data/r2dii.data.Rproj
-#> /home/mauro/git/r2dii.match/r2dii.match.Rproj
-#> /home/mauro/git/r2dii.physical.risk/r2dii.physical.risk.Rproj
-#> /home/mauro/git/r2dii.plot/r2dii.plot.Rproj
-#> /home/mauro/git/r2dii.stress.test.data/r2dii.stress.test.data.Rproj
-#> /home/mauro/git/r2dii.usethis/r2dii.usethis.Rproj
-#> /home/mauro/git/releaseworkflow/releaseworkflow.Rproj
-#> /home/mauro/git/scenarioSelector/scenarioSelector.Rproj
-#> /home/mauro/git/software-review/software-review.Rproj
-#> /home/mauro/git/stress.testing.internal/stress.testing.internal.Rproj
-#> /home/mauro/git/tacApp/tacApp.Rproj
-#> /home/mauro/git/tacApp-backup/tacApp.Rproj
-#> /home/mauro/git/tacAppPrivateData/tacAppPrivateData.Rproj
-#> /home/mauro/git/testcheck/testcheck.Rproj
 ```
 
 -   RStudio knows about recently used Projects.
@@ -199,31 +227,12 @@ via my_precious <- readRDS(here("results", "my_precious.rds"))
 
 ### [Automated workflows](https://rstats.wtf/save-source.html#automated-workflows)
 
-When orchestrating multiple scripts, try run each in its own R session.
+If running multiple scripts from a “controller”, run each in its own R
+session.:
 
-Options:
-
--   Use the callr package to `source()` each .R file.
--   Use `render()` to render each .Rmd in its own R session.
+-   Use the callr package to `source()` each .R file, or
+-   Use `render()` to render each .Rmd in its own R session, or
 -   Use the [targets](https://books.ropensci.org/targets/) package
     (search for [ds-incubator
     meetups](https://youtube.com/playlist?list=PLvgdJdJDL-APbB315sB3Lv_2VP2g0ioFO)
     about targets).
-
-### [What’s wrong with `rm(list = ls())`](https://rstats.wtf/save-source.html#rm-list-ls)
-
--   Problem: It makes your script vulnerable to hidden dependencies.
--   Solution: Write every script assuming it will be run in a fresh R
-    process.
-
-Details:
-
--   It only deletes user-created objects from the global workspace, but
-
--   Other changes persist invisibly and can have profound effects, e.g.:
-
-    -   Packages that have ever been attached via `library()` are still
-        available.
-    -   Options that have been set to non-default values remain that
-        way.
-    -   The working directory is not affected.

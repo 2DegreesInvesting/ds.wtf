@@ -7,9 +7,8 @@ analysis, outside of doing the statistical analysis itself”
 At the end of this series you will be able to do things like these:
 
 -   Setup R to always start with a blank slate.
--   Understand what’s wrong with `rm(list = ls())` and what to do
-    instead.
--   Replace `setwd()` with a project-oriented workflow.
+-   Understand why restarting R is better than `rm(list = ls())`.
+-   Understand why a project-oriented workflow is better than `setwd()`.
 -   Control R’s startup and manage sensitive information with .Rprofile
     and .Renviron.
 -   Manage your R-package library through time, and across increasing
@@ -38,17 +37,23 @@ faster, more effective, and more robust.
 
 ### A holistic workflow
 
-This meetup covers selected topics from the section A holistic workflow
-of [What They Forgot to teach you about R](https://rstats.wtf/).
+This meetup covers most topics from the section I, *A holistic
+workflow*, of the book [What They Forgot to teach you about
+R](https://rstats.wtf/).
 
 Objectives:
 
 -   Setup R to always start with a blank slate.
--   Embrace a project-oriented workflow.
--   Practice safe, portable paths.
+-   Understand why restarting R is better than `rm(list = ls())`.
+-   Understand why a project-oriented workflow is better than `setwd()`.
+-   Understand why the here package is useful, particularly for .Rmd
+    documents.
+-   Learn how to benefit from the IDE support for projects.
 -   Name files so that they order nicely, and humans and machines can
     read them.
 -   Organize you analysis inputs, outputs, and code sensibly.
+-   Learn some tools to work with objects that take a long time to
+    create.
 
 ### Next (tentative)
 
