@@ -43,12 +43,12 @@ of [What They Forgot to teach you about R](https://rstats.wtf/).
 
 Objectives:
 
--   Learn how to start from a blank slate, i.e. force yourself to save
-    the source.
--   Understand how to use a project-oriented workflow.
--   Learn how to practice safe paths.
--   Learn how to name files following three basic principles.
--   Overview one API for a humane analysis.
+-   Setup R to always start with a blank slate.
+-   Embrace a project-oriented workflow.
+-   Practice safe, portable paths.
+-   Name files so that they order nicely, and humans and machines can
+    read them.
+-   Organize you analysis inputs, outputs, and code sensibly.
 
 ### Next (tentative)
 

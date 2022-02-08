@@ -22,53 +22,6 @@ In .Rmd:
 
 <img src=https://i.imgur.com/tRoHK69.png width=300>
 
-### [What’s wrong with `rm(list = ls())`](https://rstats.wtf/save-source.html#rm-list-ls)
-
--   Problem: It makes your script vulnerable to hidden dependencies.
--   Solution: Write every script assuming it will be run in a fresh R
-    process.
-
-Details:
-
--   It only deletes user-created objects from the global workspace, but
-
--   Other changes persist invisibly and can have profound effects, e.g.:
-
-    -   Packages that have ever been attached via `library()` are still
-        available.
-    -   Options that have been set to non-default values remain that
-        way.
-    -   The working directory is not affected.
-
-### [Objects that take a long time to create](https://rstats.wtf/save-source.html#objects-that-take-a-long-time-to-create)
-
-Isolate each computationally demanding step in its own script:
-
--   Write the precious object to file with
-
-``` r
-saveRDS(my_precious, here("results", "my_precious.rds"))
-```
-
--   Then do downstream work that reloads the precious object
-
-``` r
-via my_precious <- readRDS(here("results", "my_precious.rds"))
-```
-
-### [Automated workflows](https://rstats.wtf/save-source.html#automated-workflows)
-
-When orchestrating multiple scripts, try run each in its own R session.
-
-Options:
-
--   Use the callr package to `source()` each .R file.
--   Use `render()` to render each .Rmd in its own R session.
--   Use the [targets](https://books.ropensci.org/targets/) package
-    (search for [ds-incubator
-    meetups](https://youtube.com/playlist?list=PLvgdJdJDL-APbB315sB3Lv_2VP2g0ioFO)
-    about targets).
-
 ## [Project-oriented workflow](https://rstats.wtf/project-oriented-workflow.html)
 
 What if you want to shift focus from project A to project B?
@@ -102,7 +55,7 @@ p <- ggplot(df, aes(x, y)) + geom_point()
 ggsave("figs/foofy_scatterplot.png")
 ```
 
-But wait! There is something awesome …
+But wait! There is something good.
 
 ### [Organize work into projects](https://rstats.wtf/project-oriented-workflow.html#work-in-a-project)
 
@@ -112,6 +65,21 @@ To make your projects portable follow this convention:
 -   The working directory is set to it.
 -   All paths are relative to it.
 
+### [Use projects and the here package](https://rstats.wtf/safe-paths.html#use-projects-and-the-here-package)
+
+<https://here.r-lib.org/>
+
+Good.
+
+``` r
+library(ggplot2)
+library(here)
+
+df <- read.delim(here("data", "raw_foofy_data.csv"))
+p <- ggplot(df, aes(x, y)) + geom_point()
+ggsave(here("figs", "foofy_scatterplot.png"))
+```
+
 ### [IDE support for projects](https://rstats.wtf/project-oriented-workflow.html#ide-support-for-projects)
 
 An IDE supports projects helps you do these things:
@@ -120,8 +88,13 @@ An IDE supports projects helps you do these things:
 -   Switch from project A to project B.
 -   Have both project A and project B open and running independent R
     sessions.
--   When opening a project, restart R, set the working directory,
-    restore files.
+
+And when opening a project you IDE (e.g. RStudio) does this
+automatically:
+
+-   Restart R.
+-   Set the working directory to the root.
+-   Restore open files.
 
 ### [Tricks for opening Projects](https://rstats.wtf/project-oriented-workflow.html#tricks-for-opening-projects)
 
@@ -180,24 +153,7 @@ fs::dir_ls(rstudio_projects, regexp = "[.]Rproj", recurse = TRUE)
 
 <img src=https://i.imgur.com/AGoKfEI.png width=700>
 
-## [Practice safe paths](https://rstats.wtf/safe-paths.html#safe-paths)
-
-### [Use projects and the here package](https://rstats.wtf/safe-paths.html#use-projects-and-the-here-package)
-
-<https://here.r-lib.org/>
-
-Awesome:
-
-``` r
-library(ggplot2)
-library(here)
-
-df <- read.delim(here("data", "raw_foofy_data.csv"))
-p <- ggplot(df, aes(x, y)) + geom_point()
-ggsave(here("figs", "foofy_scatterplot.png"))
-```
-
-### [How to name files](https://rstats.wtf/how-to-name-files.html)
+## [How to name files](https://rstats.wtf/how-to-name-files.html)
 
 <img src=https://i.imgur.com/zCwppDN.png width=400>
 
@@ -211,7 +167,7 @@ Awesome:
 
 <img src=https://i.imgur.com/dRN5zSd.png width=400>
 
-## [API for an analysis](https://rstats.wtf/api-for-an-analysis.html)
+## Organizing your project: [API for an analysis](https://rstats.wtf/api-for-an-analysis.html)
 
 Code:
 
@@ -224,3 +180,50 @@ Inputs and outputs:
 Summary:
 
 <img src=https://i.imgur.com/rAThdu1.png width=700>
+
+### [Objects that take a long time to create](https://rstats.wtf/save-source.html#objects-that-take-a-long-time-to-create)
+
+Isolate each computationally demanding step in its own script:
+
+-   Write the precious object to file with
+
+``` r
+saveRDS(my_precious, here("results", "my_precious.rds"))
+```
+
+-   Then do downstream work that reloads the precious object
+
+``` r
+via my_precious <- readRDS(here("results", "my_precious.rds"))
+```
+
+### [Automated workflows](https://rstats.wtf/save-source.html#automated-workflows)
+
+When orchestrating multiple scripts, try run each in its own R session.
+
+Options:
+
+-   Use the callr package to `source()` each .R file.
+-   Use `render()` to render each .Rmd in its own R session.
+-   Use the [targets](https://books.ropensci.org/targets/) package
+    (search for [ds-incubator
+    meetups](https://youtube.com/playlist?list=PLvgdJdJDL-APbB315sB3Lv_2VP2g0ioFO)
+    about targets).
+
+### [What’s wrong with `rm(list = ls())`](https://rstats.wtf/save-source.html#rm-list-ls)
+
+-   Problem: It makes your script vulnerable to hidden dependencies.
+-   Solution: Write every script assuming it will be run in a fresh R
+    process.
+
+Details:
+
+-   It only deletes user-created objects from the global workspace, but
+
+-   Other changes persist invisibly and can have profound effects, e.g.:
+
+    -   Packages that have ever been attached via `library()` are still
+        available.
+    -   Options that have been set to non-default values remain that
+        way.
+    -   The working directory is not affected.
