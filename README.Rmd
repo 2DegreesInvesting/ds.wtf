@@ -57,36 +57,17 @@ Objectives:
 * Organize you analysis inputs, outputs, and code sensibly.
 * Learn some tools to work with objects that take a long time to create.
 
-### Personal R admin
+### Installing R packages
 
-This meetup covers getting to know your R installation -- getting and setting
-where in the cloud do your packages come from and where in your computer do they
-go to.
+This meetup covers controlling where your packages come from and go to.
 
 Objectives:
 
-* Get and set the web address of the repository you install packages from:
-  * Get: `getOption("repos")`.
-  * Set: `options("repos")` in **.Rprofile**.
-
-* Install a package from a temporary repository: `install.packages("fs", repos = "https://cran.rstdio.com")`.
-
-* Get and set the path to the default directory you install packages into:
-
-  * Get (your library): `Sys.getenv("R_LIBS_USER")`.
-  * Get (your and other libraries): `.libPaths()`.
-  * Browse: `browseURL(Sys.getenv("R_LIBS_USER"))`.
-  * Set: `R_LIBS_USER="~/R/path/"` in **.Renviron**.
-
-* Install a package into a temporary library: `install.packages("fs", tempdir())`.
+* Understand the default behavior of `install.packages()`.
+* Control where packages come from: RStudio's package manager, and GitHub.
+* Control where packages go to: A default, temporary, and custom library.
 
 ### Next (tentative)
-
-* Selected topics from section II: Personal R admin.
-  
-  * Maintaining R.
-  * Set up an R dev environment.
-  * Install a source package.
 
 * Selected topics from section III: All is fail.
 

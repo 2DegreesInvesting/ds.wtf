@@ -1,0 +1,2 @@
+# %v expands to the minor version of R. See ?.libPaths()
+# R_LIBS_USER="~/R/custom-lib/%v"

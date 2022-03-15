@@ -55,9 +55,20 @@ Objectives:
 -   Learn some tools to work with objects that take a long time to
     create.
 
+### Installing R packages
+
+This meetup covers controlling where your packages come from and go to.
+
+Objectives:
+
+-   Understand the default behavior of `install.packages()`.
+-   Control where packages come from: RStudio’s package manager, and
+    GitHub.
+-   Control where packages go to: A default, temporary, and custom
+    library.
+
 ### Next (tentative)
 
--   Selected topics from section II: Personal R Admin.
 -   Selected topics from section III: All is fail.
 
 ## Resources
