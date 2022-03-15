@@ -90,7 +90,7 @@ options("repos")
 
 ```r
 # install.packages("devtools")
-devtools::install_github("2DegreesInvesting/here")
+devtools::install_github("2DegreesInvesting/r2dii.data")
 ```
 
 #### From a private GitHub repository
@@ -144,7 +144,7 @@ browseURL(.libPaths()[[1]])
 You may do this to test a package and leave your system untouched.
 
 ```r
-devtools::install_github("2DegreesInvesting/here", lib = tempdir())
+devtools::install_github("2DegreesInvesting/r2dii.data", lib = tempdir())
 ```
 
 Then use the version you want:
