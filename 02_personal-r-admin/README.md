@@ -3,7 +3,7 @@
 
 ### Before we start
 
-You may reproduce my computing environment with:
+Reproduce my computing environment:
 
 ``` bash
 docker run --rm -d \
@@ -13,26 +13,34 @@ docker run --rm -d \
   rocker/verse
 ```
 
+Packages
+
+``` r
+library(usethis)
+library(devtools)
+library(gitcreds)
+library(gh)
+```
+
 ### Understand the defaults
 
 ``` r
 install.packages("r2dii.data")
 ```
 
-Note the message informs where your packages come from and go to by
-default:
+The message informs where your packages come from and go to by default:
 
 > Installing package into …
 
 > trying URL …
 
-Now use explicit arguments to reproduce the default behavior:
+Reproduce the default behavior with explicit arguments:
 
 ``` r
 install.packages(
   "r2dii.data", 
   lib = "/usr/local/lib/R/____________", 
-  repos = "https://cloud.r-project.org"
+  repos = "https://packagemanager.rstudio.com/___________________/latest"
 )
 ```
 
@@ -42,7 +50,7 @@ See also `?install.packages()`.
 
 #### From RStudio’s package manager
 
-Setup: <https://packagemanager.rstudio.com/client/#/repos/1/overview>
+Set up: <https://packagemanager.rstudio.com/client/#/repos/1/overview>
 
 Example:
 
@@ -68,7 +76,7 @@ options("repos")
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("2DegreesInvesting/r2dii.data")
+devtools::install_github("2DegreesInvesting/here")
 ```
 
 #### From a private GitHub repository
@@ -124,7 +132,7 @@ browseURL(.libPaths()[[1]])
 You may do this to test a package and leave your system untouched.
 
 ``` r
-devtools::install_github("2DegreesInvesting/r2dii.data", lib = tempdir())
+devtools::install_github("2DegreesInvesting/here", lib = tempdir())
 ```
 
 Then use the version you want:
@@ -132,18 +140,18 @@ Then use the version you want:
 -   Using the development version:
 
 ``` r
-library(r2dii.data, lib.loc = tempdir())
+library(here, lib.loc = tempdir())
 packageVersion("r2dii.data")
 ```
 
 ``` r
-detach("package:r2dii.data")
+detach("package:here")
 ```
 
 -   Using the CRAN version:
 
 ``` r
-library(r2dii.data)
+library(here)
 packageVersion("r2dii.data")
 ```
 
