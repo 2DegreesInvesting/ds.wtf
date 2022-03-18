@@ -108,8 +108,6 @@ secret <- gh::gh_token()
 devtools::install_github("2DegreesInvesting/pastax.data", auth_token = secret)
 ```
 
-! Delete the demo token <https://github.com/settings/tokens>
-
 ### Control where your packages go to
 
 #### To the default user library
@@ -135,55 +133,45 @@ You may do this to test a package and leave your system untouched.
 devtools::install_github("2DegreesInvesting/r2dii.data", lib = tempdir())
 ```
 
-Then use the version you want:
-
--   Using the development version:
-
-``` r
-library(here, lib.loc = tempdir())
-packageVersion("r2dii.data")
-```
+Then use is with `library()`, but remember to specify the library
+location:
 
 ``` r
-detach("package:here")
+library(r2dii.data, lib.loc = tempdir())
 ```
 
--   Using the CRAN version:
+#### To a custom user library ([demo](https://youtu.be/sbp5Q8niTho)).
 
-``` r
-library(here)
-packageVersion("r2dii.data")
-```
-
-#### To a custom user library
-
-The default user library is controlled via the environmnt variable
+You can set a custom user library via the environment variable
 `R_LIBS_USER`.
-
-``` r
-Sys.getenv("R_LIBS_USER")
-```
-
-Use a custom library:
 
 ``` bash
 # usethis::edit_r_environ("project")
 R_LIBS_USER="~/R/custom-lib/%v"
 ```
 
-The directory must exist.
-
 ``` r
-dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE)
+Sys.getenv("R_LIBS_USER")
 ```
 
-The default `lib` is the fist one. See `?install.packages()` .
+But it won’t be used unless the directory actually exists:
+
+``` r
+dir.exists(Sys.getenv("R_LIBS_USER"))
+dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE)
+dir.exists(Sys.getenv("R_LIBS_USER"))
+```
+
+Remember the argument `lib` to `install.packages()` defaults to using
+the first element of `.libPaths()`.
 
 ``` r
 .libPaths()
 ```
 
-Push your user library to the front.
+Move your custom library to the front with `.libPaths()` itself.
+
+Edit .Rprofile to use your custom library in every R session.
 
 ``` r
 # usethis::edit_r_profile("project")
@@ -196,10 +184,5 @@ Confirm.
 
 ``` r
 .libPaths()
-```
-
-Install new packages.
-
-``` r
 install.packages("r2dii.data")
 ```
