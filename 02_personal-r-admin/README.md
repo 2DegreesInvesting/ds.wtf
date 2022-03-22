@@ -177,7 +177,18 @@ Note the user library is now project-specific.
 .libPaths()
 ```
 
-#### To a custom user library ([demo](https://youtu.be/sbp5Q8niTho)).
+#### To a custom user library ([demo](https://youtu.be/sbp5Q8niTho))
+
+##### Via `.libPaths()`
+
+``` r
+# usethis::edit_r_profile()
+new <- "custom-lib"
+if (!dir.exists(new)) dir.create(new, recursive = TRUE)
+.libPaths(new)
+```
+
+##### Via `R_LIBS_USER`
 
 You can set a custom user library via the environment variable
 `R_LIBS_USER`.
