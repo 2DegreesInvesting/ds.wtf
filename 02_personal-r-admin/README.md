@@ -79,7 +79,7 @@ options("repos")
 devtools::install_github("2DegreesInvesting/r2dii.data")
 ```
 
-#### From a private GitHub repository
+#### From a private GitHub repository ([demo](https://youtu.be/LvzljgPrsjg))
 
 Fails
 
@@ -142,10 +142,10 @@ For an in-depth explanation see the section Details of `?.libPaths()`.
 .libPaths()[[1]]
 ```
 
-Study your default library.
+Note the installed packages:
 
 ``` r
-browseURL(.libPaths()[[1]])
+list.files(.libPaths()[[1]])
 ```
 
 #### To a temporary library
@@ -153,14 +153,13 @@ browseURL(.libPaths()[[1]])
 You may do this to test a package and leave your system untouched.
 
 ``` r
-devtools::install_github("2DegreesInvesting/r2dii.data", lib = tempdir())
+pak::pkg_install("2DegreesInvesting/r2dii.data", tempdir())
 ```
 
-Then use is with `library()`, but remember to specify the library
-location:
+Then use your temporary library in `library()`.
 
 ``` r
-library(r2dii.data, lib.loc = tempdir())
+library(r2dii.data, tempdir())
 ```
 
 #### To a project-specific library
@@ -171,10 +170,10 @@ library(r2dii.data, lib.loc = tempdir())
 
 ``` r
 # install.packages("renv")
-renv::init()
+renv::init()    
 ```
 
-The default library is now project-specific.
+Note the default library is now project-specific.
 
 ``` r
 .libPaths()[[1]]
