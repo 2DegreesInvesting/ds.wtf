@@ -121,14 +121,14 @@ Still fails.
 devtools::install_github("2DegreesInvesting/pastax.data")
 ```
 
-Using the GitHub token.
+`install_github()` needs the token.
 
 ```r
 secret <- gh::gh_token()
 devtools::install_github("2DegreesInvesting/pastax.data", auth_token = secret)
 ```
 
-The [pak](https://pak.r-lib.org/) package is cleverer.
+`pkg_install()` from the [pak](https://pak.r-lib.org/) package is cleverer.
 
 ```r
 # install.packages("pak")
