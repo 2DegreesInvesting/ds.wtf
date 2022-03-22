@@ -6,11 +6,7 @@
 Reproduce my computing environment:
 
 ``` bash
-docker run --rm -d \
-  -e PASSWORD=123 \
-  -p 8787:8787 \
-  -v $(pwd):/home/rstudio/ds.wtf \
-  rocker/verse
+docker-compose up
 ```
 
 Packages
