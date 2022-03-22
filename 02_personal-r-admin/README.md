@@ -6,6 +6,8 @@
 Reproduce my computing environment:
 
 ``` bash
+git clone https://github.com/2DegreesInvesting/ds.wtf
+cd ds.wtf
 docker-compose up
 ```
 
