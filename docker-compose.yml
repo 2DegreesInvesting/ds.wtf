@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  rstudio:
+    build: .
+    ports:
+      - 8787:8787
+    environment:
+    - PASSWORD=123
+    volumes:
+      - .:/home/rstudio/ds.wtf
