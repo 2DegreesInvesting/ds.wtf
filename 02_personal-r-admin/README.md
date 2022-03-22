@@ -20,7 +20,6 @@ library(usethis)
 library(devtools)
 library(gitcreds)
 library(gh)
-library(pak)
 ```
 
 ### Understand the defaults
@@ -116,7 +115,7 @@ secret <- gh::gh_token()
 devtools::install_github("2DegreesInvesting/pastax.data", auth_token = secret)
 ```
 
-Same. The [pak](https://pak.r-lib.org/) package is cleverer.
+The [pak](https://pak.r-lib.org/) package is cleverer.
 
 ``` r
 # install.packages("pak")
@@ -125,10 +124,18 @@ pak::pkg_install("2DegreesInvesting/pastax.data)
 
 ### Control where your packages go to
 
+`?.libPaths()`:
+
+> `.libPaths` gets/sets the library trees within which packages are
+> looked for.
+
+For an in-depth explanation see the section Details of `?.libPaths()`.
+
 #### To the default user library
 
-In `?install.packages()` the argument `lib` “defaults to the first
-element of `.libPaths()`”.
+`?install.packages()`:
+
+> `lib`: If missing, defaults to the first element of `.libPahts()`.
 
 ``` r
 .libPaths()[[1]]
@@ -155,21 +162,7 @@ location:
 library(r2dii.data, lib.loc = tempdir())
 ```
 
-More generally, the default library is the fist path in `.libPaths()`.
-
-> If missing, defaults to the first element of `.libPaths()`. –
-> `?install.packages()`.
-
-``` r
-.libPaths()
-.libPaths(tempdir())
-.libPaths()
-
-
-library(r2dii.data, lib.loc = tempdir())
-```
-
-#### To a project-specific library.
+#### To a project-specific library
 
 > The [renv](https://rstudio.github.io/renv/) package helps you create
 > reproducible environments for your R projects. –
@@ -183,7 +176,7 @@ renv::init()
 The default library is now project-specific.
 
 ``` r
-.libPaths()
+.libPaths()[[1]]
 ```
 
 #### To a custom user library ([demo](https://youtu.be/sbp5Q8niTho)).

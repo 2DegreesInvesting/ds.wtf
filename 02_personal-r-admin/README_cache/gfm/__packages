@@ -1,6 +1,11 @@
+base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
 usethis
 devtools
 gitcreds
 gh
-base
-pak
