@@ -165,14 +165,16 @@ library(r2dii.data, tempdir())
 > <https://rstudio.github.io/renv/>
 
 ``` r
+.libPaths()
+
 # install.packages("renv")
 renv::init()    
 ```
 
-Note the default library is now project-specific.
+Note the user library is now project-specific.
 
 ``` r
-.libPaths()[[1]]
+.libPaths()
 ```
 
 #### To a custom user library ([demo](https://youtu.be/sbp5Q8niTho)).
