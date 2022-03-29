@@ -9,9 +9,8 @@ set.seed(2)
 url <- glue("https://www.surf-forecast.com/breaks/{breaks()}/forecasts/latest")
 
 data <- tibble(url) %>%
-  mutate(path = here("html", glue("{breaks()}.qs"))) %>%
-  bind_rows(tibble(url = "", path = "...qs"))
-
-data <- slice_sample(data, n = 9)
+  mutate(path = make_html_path(url)) %>%
+  bind_rows(tibble(url = "", path = "...qs")) %>%
+  slice_sample(n = nrow(.))
 
 qsave(data, here("data", "dataset.qs"))

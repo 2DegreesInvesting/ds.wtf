@@ -13,14 +13,16 @@ dataset <- qread(here("data/dataset.qs"))
 
 # Iterate as fast as possible -------------------------------------------------
 
-
-# FIXME
 result <- dataset %>%
   compute(show_progress = TRUE) %>%
   use_cache("result")  # a) Reuse computations; b) Avoid hard-coding paths
 
 result
 
+
+
+
+# FIXME
 library(tidyverse)
 devtools::load_all()
 
