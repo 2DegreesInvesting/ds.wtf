@@ -1,11 +1,12 @@
 library(pins)
 library(glue)
 library(here)
+library(progress)
 library(fs)
 # devtools::install_github("rstudio/chromote")
 library(chromote)
 
-use_cache <- function(x, name, board = board_local(), overwrite = FALSE) {
+use_pin <- function(x, name, board = board_local(), overwrite = FALSE) {
   if (!pin_exists(board, name) || overwrite) pin_write(board, x, name)
   pin_read(board, name)
 }
@@ -41,10 +42,15 @@ make_html_path <- function(url) {
 }
 
 # Write the dom as html -- generated from a headless browser
-write_rendered_html <- function(url, path, overwrite = FALSE) {
+write_rendered_html <- function(url, path, overwrite = FALSE, show_progress = FALSE) {
+  browser()
   session <- start_chrome_session()
 
+  if (show_progress) pb <- progress::progress_bar$new(total = length(url))
   for (i in seq_along(url)) {
+    if (show_progress) pb$tick()
+    Sys.sleep(1)
+
     if (!overwrite && file_exists(path[[i]])) {
       next()
     }
@@ -52,7 +58,7 @@ write_rendered_html <- function(url, path, overwrite = FALSE) {
     qsave(html, path[[i]])
   }
 
-  end_chrome_session()
+  end_chrome_session(session)
 
   invisible(url)
 }

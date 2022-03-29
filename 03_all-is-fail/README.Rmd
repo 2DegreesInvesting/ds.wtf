@@ -18,15 +18,16 @@ knitr::opts_chunk$set(
 
 * Locate the bug with `traceback()`
 
+* Enter the debugger mode with a breakpoint or `browser()`
+
+* Navigate in debugger mode with the keyboard
+
 * Reduce the size of the problem with a binary search
 
 * Reproduce the bug as simply as possible and share it with the package reprex
 
-* Enter the debugger mode with a breakpoint or `browser()`
-
 * Get feedback with `str()` and `message()`
 
-* Navigate in debugger mode with the keyboard
 
 * Step into deeper functions in a pipe with `debugonce()`
 
