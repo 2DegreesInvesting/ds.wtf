@@ -36,6 +36,3 @@
     data.
 
 -   Learn how to use the debugger.
-
--   Share a **rep**roducible **ex**ample
-    ([reprex](https://reprex.tidyverse.org/)).
