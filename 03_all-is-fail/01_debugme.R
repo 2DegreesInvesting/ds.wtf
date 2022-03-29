@@ -1,4 +1,6 @@
 # Make the problem self-contained and portable
+# Iterate quickly: Use cache to reuse computations and use portable paths
+# Show progress
 
 library(tidyverse)
 library(fs)

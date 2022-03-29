@@ -43,7 +43,6 @@ make_html_path <- function(url) {
 
 # Write the dom as html -- generated from a headless browser
 write_rendered_html <- function(url, path, overwrite = FALSE, show_progress = FALSE) {
-  browser()
   session <- start_chrome_session()
 
   if (show_progress) pb <- progress::progress_bar$new(total = length(url))
